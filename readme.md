@@ -19,13 +19,14 @@ Example structure:
 python-learning/
 │
 ├── day01/
-│   └── exercise.py
-│
+│   └── ex01.py
+│   └── ex02.py│
 ├── day02/
-│   └── loops_practice.py
-│
+│   └── ex01.py
+│   └── ex02.py│
 ├── day03/
-│   └── lists_practice.py
+│   └── ex01.py
+│   └── ex02.py│
 │
 └── README.md
 ```
