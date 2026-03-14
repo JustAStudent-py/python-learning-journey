@@ -1,30 +1,44 @@
+# List to store the numbers entered by the user
 numbers = []
-even_number = 0
-odd_number = 0
-total_numbers = 0
+
+# Counters
+even_count = 0
+odd_count = 0
+
+
+print("\n=== Number Statistics CLI ===")
+print("Enter numbers to analyze them.")
+print("Type 0 to exit.\n")
 
 while True:
-    number = int(input("Choose a number (0 to exit): "))
-    
+    # Ask the user to enter a number
+    number = int(input("Enter a number (0 to exit): "))
 
+    # Exit condition
     if number == 0:
-        print("Goodbye")
+        print("\nExiting program...\n")
         break
-
-    total_numbers += 1  
-    numbers.append(number)
     
-    if number % 2 == 0:
-        even_number += 1
-    else:
-        odd_number += 1
 
+    # Store the number in the list
+    numbers.append(number)
+
+    # Check if the number is even or odd
+    if number % 2 == 0:
+        even_count += 1
+    else:
+        odd_count += 1
+
+
+# Sort the list of numbers
 numbers.sort()
 
-print(f"Total numbers entered: {total_numbers}")
-print(f"Even numbers: {even_number}")
-print(f"Odd number: {odd_number}")
-print(f"largest number: {numbers[-1]}")
-print(f"Smallest number: {numbers[0]}")
-
-
+if numbers:
+    # Display results
+    print("======= RESULTS =======")
+    print(f"Total numbers entered: {len(numbers)}")
+    print(f"Even numbers: {even_count}")
+    print(f"Odd numbers: {odd_count}")
+    
+    print(f"Largest number: {numbers[-1]}")
+    print(f"Smallest number: {numbers[0]}")
