@@ -1,7 +1,7 @@
 def verify_numbers(numbers):
     count_dict = {}
 
-    # Count occurrences (1 loop só)
+    # Count occurrences (only 1 loop)
     for n in numbers:
         if n in count_dict:
             count_dict[n] += 1
