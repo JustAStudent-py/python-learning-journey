@@ -86,7 +86,7 @@ def show_statistics(users):
     adults = len(only_adults(users))
     minors = total - adults
 
-    print(f"\n📊 Statistics: Total Users: {total} | Adults: {adults} | Minors: {minors}\n")
+    print(f"\n Statistics: Total Users: {total} | Adults: {adults} | Minors: {minors}\n")
 
 # Function to display menu
 def menu():

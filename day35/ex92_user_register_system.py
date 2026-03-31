@@ -80,12 +80,8 @@ def menu():
     print("4- Exit")
     print("=" * 40)
 
-def validate_email(users):
-    
-    for arroba in user['email']:
-        if not "@" in user['email']:
-            print("Insert a valid email.")
-            return
+def validate_email():
+    print()
         
 options = {
     1: add_user,
