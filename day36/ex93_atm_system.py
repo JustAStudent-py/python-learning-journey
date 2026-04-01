@@ -1,91 +1,104 @@
 # Initial account balance
 balance = 0
 
+# List to store transaction history
+history = []
 
-def show_balance():
-    """
-    Displays the current account balance.
-    """
+def show_balance(balance, history):  # Displays the current user balance
+    
     if balance == 0:
-        print("No balance available.")
+        print("Current balance: $0.00")
     else:
         print(f"Balance: ${balance:.2f}")
+    
+    return balance, history
 
 
-def deposit_amount():
-    """
-    Allows the user to deposit money into the account.
-    """
-    global balance
-
+def deposit_value(balance, history):  # Allows the user to deposit money
+    
     try:
-        # Ask user for deposit amount
-        deposit_value = float(input("Enter the amount to deposit: $"))
+        # Ask for deposit amount
+        deposit_amount = float(input("Enter the amount to deposit: $"))
     except ValueError:
         print("Please enter a valid number.")
-        return 0
+        return balance, history
 
-    # Check if value is positive
-    if deposit_value > 0:
-        balance += deposit_value
-        print(f"Deposit: ${deposit_value:.2f} | New balance: ${balance:.2f}")
-        return balance
+    # Check if the amount is positive
+    if deposit_amount > 0:
+        balance += deposit_amount
+        history.append(f"Deposit: ${deposit_amount:.2f}")
+        print(f"Deposit: ${deposit_amount:.2f} | New balance: ${balance:.2f}")
     else:
         print("Deposit amount must be greater than zero.")
+    
+    return balance, history
 
 
-def withdraw_amount():
-    """
-    Allows the user to withdraw money from the account.
-    """
-    global balance
-
+def withdraw_balance(balance, history):  # Allows the user to withdraw money
+    
     # Check if there is available balance
     if balance <= 0:
         print("No balance available.")
-        return
+        return balance, history
 
     try:
-        # Ask user for withdrawal amount
-        withdraw_value = float(input("Enter the amount to withdraw: $"))
+        # Ask for withdrawal amount
+        withdraw_amount = float(input("Enter the amount to withdraw: $"))
     except ValueError:
         print("Please enter a valid number.")
-        return 0
+        return balance, history
 
     # Check if withdrawal exceeds balance
-    if withdraw_value > balance:
+    if withdraw_amount > balance:
         print("Withdrawal amount exceeds available balance.")
     else:
-        balance -= withdraw_value
-        print(f"Withdrawal: ${withdraw_value:.2f} | New balance: ${balance:.2f}")
-        return balance
+        balance -= withdraw_amount
+        history.append(f"Withdrawal: ${withdraw_amount:.2f}")
+        print(f"Withdrawal: ${withdraw_amount:.2f} | New balance: ${balance:.2f}")
+    
+    return balance, history    
 
 
-def menu():
-    """
-    Displays the main menu and returns the selected option.
-    """
+def show_history(balance, history):  # Function to display history
+    
+    # Check if history list is empty
+    if not history:
+        print("No transactions have been made yet.")
+    
+    else:
+        print("\n=== TRANSACTION HISTORY ===")
+        for item in history:
+            print(item)
+    
+    return balance, history
+
+
+def menu():  # Displays the main menu and returns user choice
+    
     print("=" * 40)
     print("ATM System")
     print("=" * 40)
     print("1 - Show Balance")
     print("2 - Deposit")
     print("3 - Withdraw")
-    print("4 - Exit")
+    print("4 - Show History")
+    print("5 - Exit")
     print("=" * 40)
 
+    # Validate user input
     try:
-        return int(input("Choose an option (1-4): "))
+        return int(input("Choose an option (1-5): "))
     except ValueError:
-        print("Invalid input. Please choose a number between 1 and 4.")
+        print("Invalid input. Please enter a number between 1 and 5.")
         return 0
 
 
 # Mapping options to functions
 options = {
     1: show_balance,
-    2: deposit_amount,
-    3: withdraw_amount,
+    2: deposit_value,
+    3: withdraw_balance,
+    4: show_history
 }
 
 
@@ -93,10 +106,10 @@ options = {
 while True:
     option = menu()
 
-    if option == 4:
+    if option == 5:
         print("Thank you for using the system.")
         break
     elif option in options:
-        options[option]()  # Execute selected function
+        balance, history = options[option](balance, history)
     else:
-        print("Invalid option. Choose a number between 1 and 4.")
+        print("Invalid option. Please choose a number between 1 and 5.")
