@@ -25,8 +25,8 @@ def depositar_valor(saldo, historico):  #Permite ao usuário depositar um valor 
     # Verifica se o valor é positivo
     if valor_deposito > 0:
         saldo += valor_deposito
-        historico.append(f"Deposito: ${valor_deposito:.2f}")
-        print(f"Depósito: ${valor_deposito:.2f} | Novo saldo: ${saldo:.2f}")
+        historico.append(f"Deposito: +${valor_deposito:.2f}")
+        print(f"Depósito: +${valor_deposito:.2f} | Novo saldo: ${saldo:.2f}")
     else:
         print("O valor do depósito precisa ser maior que zero.")
     
@@ -49,10 +49,12 @@ def sacar_saldo(saldo, historico):  #Permite ao usuário sacar um valor da conta
     # Verifica se o saque é maior que o saldo
     if valor_saque > saldo:
         print("Valor do saque maior que o saldo disponível.")
+    elif valor_saque <= 0:
+        print("O valor do saque precisar ser maior do que zero.")
     else:
         saldo -= valor_saque
-        historico.append(f"Saque: ${valor_saque:.2f}")
-        print(f"Saque: ${valor_saque:.2f} | Novo saldo: ${saldo:.2f}")
+        historico.append(f"Saque: -${valor_saque:.2f}")
+        print(f"Saque: -${valor_saque:.2f} | Novo saldo: ${saldo:.2f}")
     
     return saldo, historico    
 
