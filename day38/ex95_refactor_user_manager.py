@@ -8,7 +8,7 @@ def create_user(users):
     email = input("Insert the user email: ").lower()
 
     user = {
-        "id": next_id,
+        "id": len(users),
         "name": name,
         "email": email
     }
@@ -35,7 +35,8 @@ def find_user(users):
 
     if not users:
         print("No users registred")
-        return users
+        return 
+
     
     name = input("Insert the user name: ").lower().strip()
     
