@@ -5,7 +5,7 @@
 def get_name_and_email():
     """
     Captures user name and email input.
-    Applies basic normalization to avoid inconsistencies.
+    Applies normalization to ensure consistency.
     """
     print("\n=== USER INPUT ===")
 
@@ -14,44 +14,119 @@ def get_name_and_email():
 
     return name, email    
 
+def find_user(name, users):
+    """
+    Searches for a user by name.
+    Returns the user object or None.
+    """
+    for user in users:
+        if user['name'] == name:
+            return user
+    return None
 
+def email_exists(email, users):
+    """
+    Checks if an email already exists in the system.
+    """
+    for user in users:
+        if user['email'] == email:
+            return True
+    return False
+    
 def is_valid_email(email):
     """
     Simple email validation.
     """
     return "@" in email and "." in email
 
-
 # ==============================
-# USER OPERATIONS
+# BUSINESS LOGIC
 # ==============================
 
-def create_user(users):
+def create_user_logic(name, email, users, next_id):
     """
-    Creates a new user and stores it in the list.
+    Handles user creation rules and validation.
+    Returns either:
+    - user dict (success)
+    - error string (failure)
+    """
+    if not name:
+        return "invalid_name"
+    
+    if not is_valid_email(email):
+        return "invalid_email"
+    
+    if email_exists(email, users):
+        return "email_exists"
+    
+    user = {
+        "id": next_id,
+        "name": name,
+        "email": email
+    }
+    
+    users.append(user)
+    return user
+
+def update_email_logic(users, name, new_email):
+    """
+    Handles email update rules.
+    """
+    user = find_user(name, users)
+    
+    if not user:
+        return "not_found"
+    
+    if not is_valid_email(new_email):
+        return "invalid_email"
+    
+    if email_exists(new_email, users):
+        return "email_exists"
+    
+    user['email'] = new_email
+    return "success"
+
+def delete_user_logic(user_id, users):
+    """
+    Removes a user by ID.
+    Returns True if removed, False otherwise.
+    """
+    for user in users:
+        if user['id'] == user_id:
+            users.remove(user)
+            return True
+    return False
+
+# ==============================
+# CLI LAYER
+# ==============================
+
+def create_user(users, next_id):
+    """
+    CLI wrapper for user creation.
     """
     print("\n=== CREATE USER ===")
 
     name, email = get_name_and_email()
     
-    if not name:
+    result = create_user_logic(name, email, users, next_id)
+
+    # Interprets logic response
+    if result == "invalid_name":
         print("Invalid name.")
-        return
+        return next_id
     
-    if not is_valid_email(email):
+    elif result == "invalid_email":
         print("Invalid email.")
-        return
+        return next_id
     
-    user = {
-        'id': len(users) + 1,
-        'name': name,
-        'email': email
-    }
+    elif result == "email_exists":
+        print("Email already exists.")
+        return next_id
     
-    users.append(user)
-
-    print("User created successfully.")
-
+    else:
+        print("User created successfully.")
+        return next_id + 1
 
 def show_users(users):
     """
@@ -66,35 +141,26 @@ def show_users(users):
     else:
         print("No users registered.")
 
-
 def delete_user(users):
     """
-    Removes a user by ID.
+    CLI wrapper for user deletion.
     """
     print("\n=== DELETE USER ===")
 
-    found = False
-    
     try:
         user_id = int(input("Enter user ID to remove: "))
     except ValueError:
         print("Invalid ID.")
         return
-    
-    for user in users:
-        if user['id'] == user_id:
-            users.remove(user)
-            print("User removed successfully.")
-            found = True
-            break
-    
-    if not found:
-        print("User not found.")      
 
+    if delete_user_logic(user_id, users):
+        print("User removed successfully.")
+    else:
+        print("User not found.")
 
 def search_user_on_list(users):
     """
-    Searches for a user by name.
+    CLI wrapper for user search.
     """
     print("\n=== SEARCH USER ===")
     
@@ -102,59 +168,41 @@ def search_user_on_list(users):
         print("No users found.")
         return
     
-    found = False
-    find_user = input("Enter a name to search: ").lower().strip()
+    name = input("Enter a name to search: ").strip()
     
-    for user in users:
-        if user['name'] == find_user:
-            print("\nUser found:")
-            print(f"[{user['id']}] Name: {user['name']} | Email: {user['email']}")
-            found = True
-        
-    if not found:
-        print("User not found.")
+    user = find_user(name, users)
 
-
-def update_user_email(users):
-    """
-    Updates the email of an existing user.
-    """
-    print("\n=== UPDATE EMAIL ===")
-
-    name, email = get_name_and_email()
-    found = False
-
-    if not name:
-        print("Invalid name.")
-        return
-    
-    if not is_valid_email(email):
-        print("Invalid email.")
-        return
-
-    # Check if email is already in use
-    for u in users:
-        if u['email'] == email:
-            print("Email already in use.")
-            return
-    
-    for user in users:
-        if user['name'] == name:
-            user['email'] = email
-            found = True
-    
-    if found:
-        print("Email updated successfully.")
+    if user:
+        print("\nUser found:")
+        print(f"[{user['id']}] Name: {user['name']} | Email: {user['email']}")
     else:
         print("User not found.")
 
+def update_user_email(users):
+    """
+    CLI wrapper for updating user email.
+    """
+    print("\n=== UPDATE EMAIL ===")
+
+    name, new_email = get_name_and_email()
+    
+    result = update_email_logic(users, name, new_email)
+
+    if result == "not_found":
+        print("User not found.")
+    elif result == "invalid_email":
+        print("Invalid email.")
+    elif result == "email_exists":
+        print("Email already exists.")
+    else:
+        print("Email updated successfully.")
 
 # ==============================
 # SYSTEM CORE
 # ==============================
 
 users = []
-
+next_id = 1
 
 def menu():
     """
@@ -171,27 +219,6 @@ def menu():
     print("6 - Exit")
     print("=" * 40)
 
-
-def handle_options(option):
-    """
-    Executes the selected option.
-    """
-    if option in options:
-        options[option](users)
-    else:
-        print("Invalid option. Please choose between 1 and 6.")
-
-
-# Option mapping
-options = {
-    1: create_user,
-    2: show_users,
-    3: search_user_on_list,
-    4: update_user_email,
-    5: delete_user
-}
-
-
 # ==============================
 # MAIN LOOP
 # ==============================
@@ -206,7 +233,18 @@ while True:
             print("\nClosing system. Goodbye.")
             break
         
-        handle_options(option)
+        elif option == 1:
+            next_id = create_user(users, next_id)
+        elif option == 2:
+            show_users(users)
+        elif option == 3:
+            search_user_on_list(users)
+        elif option == 4:
+            update_user_email(users)
+        elif option == 5:
+            delete_user(users)
+        else:
+            print("Invalid option. Please choose between 1 and 6.")
     
     except ValueError: 
         print("Invalid input. Please enter a number between 1 and 6.")
