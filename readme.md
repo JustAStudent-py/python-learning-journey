@@ -19,14 +19,14 @@ Example structure:
 python-learning/
 │
 ├── day01/
-│   └── ex01.py
-│   └── ex02.py│
+│   └── ex01_greeting.py
+│   └── ex02_temperature_converter.py│
 ├── day02/
-│   └── ex01.py
-│   └── ex02.py│
+│   └── ex06_number_classifier.py
+│   └── ex07_number_comparision.py│
 ├── day03/
-│   └── ex01.py
-│   └── ex02.py│
+│   └── ex09_grade_average_calculator.py
+│   └── ex10_meters_to_centimeters.py│
 │
 └── README.md
 ```
