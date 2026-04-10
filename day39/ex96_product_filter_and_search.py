@@ -79,3 +79,4 @@ if result:
     print(f"Price: {result['price']}")
 else:
     print("Product not found.")
+
