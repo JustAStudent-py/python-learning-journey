@@ -93,6 +93,33 @@ def create_products_list(names, prices):
     return products
 
 
+def show_index_users(users):
+    """
+    Returns a summary (index) of users:
+    - total users
+    - total adults
+    - list of adult names
+    """
+    adults = return_adults(users)
+   
+    index_users = {
+        "total": len(users),
+        "adults": len(adults),
+        "names_adults": show_adults_names(users)
+    }        
+    return index_users
+
+
+def ordened_adults(users):
+    """
+    Returns adult users sorted by age.
+    """
+    adults = return_adults(users)
+
+    sorted_list = sorted(adults, key=lambda user: user['age'])
+    return sorted_list
+
+
 # ==============================
 # OUTPUT (CLI DISPLAY)
 # ==============================
@@ -144,3 +171,31 @@ products = create_products_list(names, prices)
 
 for product in products:
     print(f"- {product['name']} | Price: {product['price']}")
+
+
+# ==============================
+# USER INDEX (SUMMARY)
+# ==============================
+
+print("\n=== USER SUMMARY ===")
+
+index_data = show_index_users(users)
+
+print(f"Total users: {index_data['total']}")
+print(f"Total adults: {index_data['adults']}")
+
+print("Adult names:")
+for name in index_data['names_adults']:
+    print(f"- {name}")
+
+
+# ==============================
+# ORDERED ADULTS
+# ==============================
+
+print("\n=== ORDERED ADULT USERS (BY AGE) ===")
+
+ordered = ordened_adults(users)
+
+for user in ordered:
+    print(f"- {user['name']} | Age: {user['age']}")
