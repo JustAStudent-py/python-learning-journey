@@ -46,8 +46,6 @@ def build_email(info):
     }
 
     return email
-    
-
 # Simula envio do email (apenas print no terminal)
 def send_email(email):
     print("\n=== Sending Email ===")
